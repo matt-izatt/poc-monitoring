@@ -1,4 +1,41 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_MIMIR",
+      "label": "Mimir",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "11.2.0"
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -26,7 +63,7 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 15798,
   "graphTooltip": 1,
-  "id": 3,
+  "id": null,
   "links": [
     {
       "asDropdown": false,
@@ -45,9 +82,8 @@
   "panels": [
     {
       "datasource": {
-        "default": false,
         "type": "prometheus",
-        "uid": "cdwfs230vvfnkf"
+        "uid": "${DS_MIMIR}"
       },
       "fieldConfig": {
         "defaults": {
@@ -108,7 +144,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "cdwfs230vvfnkf"
+            "uid": "${DS_MIMIR}"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -128,9 +164,8 @@
     },
     {
       "datasource": {
-        "default": false,
         "type": "prometheus",
-        "uid": "cdwfs230vvfnkf"
+        "uid": "${DS_MIMIR}"
       },
       "fieldConfig": {
         "defaults": {
@@ -191,7 +226,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "cdwfs230vvfnkf"
+            "uid": "${DS_MIMIR}"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -211,9 +246,8 @@
     },
     {
       "datasource": {
-        "default": false,
         "type": "prometheus",
-        "uid": "cdwfs230vvfnkf"
+        "uid": "${DS_MIMIR}"
       },
       "fieldConfig": {
         "defaults": {
@@ -274,7 +308,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "cdwfs230vvfnkf"
+            "uid": "${DS_MIMIR}"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -294,9 +328,8 @@
     },
     {
       "datasource": {
-        "default": false,
         "type": "prometheus",
-        "uid": "cdwfs230vvfnkf"
+        "uid": "${DS_MIMIR}"
       },
       "fieldConfig": {
         "defaults": {
@@ -357,7 +390,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "cdwfs230vvfnkf"
+            "uid": "${DS_MIMIR}"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -377,9 +410,8 @@
     },
     {
       "datasource": {
-        "default": false,
         "type": "prometheus",
-        "uid": "cdwfs230vvfnkf"
+        "uid": "${DS_MIMIR}"
       },
       "fieldConfig": {
         "defaults": {
@@ -440,7 +472,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "cdwfs230vvfnkf"
+            "uid": "${DS_MIMIR}"
           },
           "editorMode": "code",
           "exemplar": false,
@@ -460,9 +492,8 @@
     },
     {
       "datasource": {
-        "default": false,
         "type": "prometheus",
-        "uid": "cdwfs230vvfnkf"
+        "uid": "${DS_MIMIR}"
       },
       "fieldConfig": {
         "defaults": {
@@ -545,7 +576,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "cdwfs230vvfnkf"
+            "uid": "${DS_MIMIR}"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -564,9 +595,8 @@
     },
     {
       "datasource": {
-        "default": false,
         "type": "prometheus",
-        "uid": "cdwfs230vvfnkf"
+        "uid": "${DS_MIMIR}"
       },
       "fieldConfig": {
         "defaults": {
@@ -648,7 +678,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "cdwfs230vvfnkf"
+            "uid": "${DS_MIMIR}"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -668,9 +698,8 @@
     },
     {
       "datasource": {
-        "default": false,
         "type": "prometheus",
-        "uid": "cdwfs230vvfnkf"
+        "uid": "${DS_MIMIR}"
       },
       "fieldConfig": {
         "defaults": {
@@ -752,7 +781,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "cdwfs230vvfnkf"
+            "uid": "${DS_MIMIR}"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -768,7 +797,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "cdwfs230vvfnkf"
+            "uid": "${DS_MIMIR}"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -786,9 +815,8 @@
     },
     {
       "datasource": {
-        "default": false,
         "type": "prometheus",
-        "uid": "cdwfs230vvfnkf"
+        "uid": "${DS_MIMIR}"
       },
       "fieldConfig": {
         "defaults": {
@@ -869,7 +897,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "cdwfs230vvfnkf"
+            "uid": "${DS_MIMIR}"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -885,7 +913,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "cdwfs230vvfnkf"
+            "uid": "${DS_MIMIR}"
           },
           "editorMode": "code",
           "exemplar": true,
@@ -913,14 +941,10 @@
     "list": [
       {
         "allValue": ".*",
-        "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
-        },
+        "current": {},
         "datasource": {
           "type": "prometheus",
-          "uid": "cdwfs230vvfnkf"
+          "uid": "${DS_MIMIR}"
         },
         "definition": "label_values(container_memory_usage_bytes{image!=\"\"}, job)",
         "description": "",
@@ -944,14 +968,10 @@
         "useTags": false
       },
       {
-        "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
-        },
+        "current": {},
         "datasource": {
           "type": "prometheus",
-          "uid": "cdwfs230vvfnkf"
+          "uid": "${DS_MIMIR}"
         },
         "definition": "label_values(container_memory_usage_bytes{job=~\"$job\", image!=\"\"},container)",
         "hide": 0,
