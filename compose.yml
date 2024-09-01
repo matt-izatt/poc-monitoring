@@ -1,0 +1,90 @@
+
+services:
+  # agent:
+  #   container_name: agent
+  #   image: grafana/agent
+  #   volumes:
+  #     - ./agent/config:/etc/agent
+  #     - ./agent/data:/tmp/agent
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   entrypoint:
+  #    - /bin/agent
+  #    - -config.file=/etc/agent/agent-config.yml
+  #   ports:
+  #     - "12345:12345"
+  #     - "4317:4317"
+  #     - "4318:4318"
+  #   networks:
+  #     - monitoring
+
+  alloy:
+    container_name: alloy
+    image: 'grafana/alloy:latest'
+    command: 'run --server.http.listen-addr=0.0.0.0:12345 --storage.path=/var/lib/alloy/data /etc/alloy/config.alloy'
+    volumes:
+      - './alloy/config:/etc/alloy'
+      - './alloy/data:/var/lib/alloy/data'
+      - "/var/run/docker.sock:/var/run/docker.sock:rw"
+      - "/var/lib/docker/:/var/lib/docker"
+      - "/:/rootfs"
+      - "/sys:/sys"
+      - "/dev/disk/:/dev/disk"
+    devices:
+      - /dev/kmsg
+    ports:
+      - '12345:12345'
+    privileged: true
+    networks:
+      - monitoring
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana-oss
+    volumes:
+      - ./grafana/data:/var/lib/grafana
+    ports: 
+      - "2000:3000"
+    environment:
+      - GF_FEATURE_TOGGLES_ENABLE=traceqlEditor
+    networks:
+      - monitoring
+
+  loki:
+    container_name: loki
+    image: grafana/loki
+    command: -config.file=/etc/loki/loki-config.yml
+    volumes:
+      - ./loki/config:/etc/loki
+      - ./loki/data:/tmp/loki
+    ports: 
+      - "2001:3001"
+    networks:
+      - monitoring
+
+  mimir:
+    container_name: mimir
+    image: grafana/mimir
+    command: -config.file=/etc/mimir/mimir-config.yml
+    volumes:
+      - ./mimir/config:/etc/mimir
+      - ./mimir/data:/tmp/mimir
+    ports: 
+      - "2002:3002"
+    networks:
+      - monitoring
+
+  # tempo:
+  #   container_name: tempo
+  #   image: grafana/tempo
+  #   command: -config.file=/etc/tempo/tempo-config.yml
+  #   volumes:
+  #     - ./tempo/config:/etc/tempo
+  #     - ./tempo/data:/tmp/tempo
+  #   ports: 
+  #     - "2003:3003"
+  #   networks:
+  #     - monitoring
+
+networks:
+  monitoring:
+      name: network_monitoring

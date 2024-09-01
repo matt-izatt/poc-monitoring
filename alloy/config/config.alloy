@@ -1,0 +1,72 @@
+//Logs
+discovery.docker "logs_integrations_docker" {
+    host = "unix:///var/run/docker.sock"
+}
+
+discovery.relabel "logs_integrations_docker" {
+    targets = []
+
+    rule {
+        target_label = "job"
+        replacement = "integrations/docker"
+    }
+
+    rule {
+        target_label = "instance"
+        replacement = constants.hostname
+    }
+
+    rule {
+        source_labels = ["__meta_docker_container_name"]
+        regex = "/(.*)"
+        target_label = "container"
+    }
+
+    rule {
+        source_labels = ["__meta_docker_container_log_stream"]
+        target_label = "stream"
+    }
+}
+
+loki.source.docker "logs_integrations_docker" {
+    host       = "unix:///var/run/docker.sock"
+    targets    = discovery.docker.logs_integrations_docker.targets
+    labels     = {"source" = "docker"}
+    relabel_rules = discovery.relabel.logs_integrations_docker.rules
+    forward_to = [loki.write.local.receiver]
+}
+
+
+loki.write "local" {
+    endpoint {
+        url = "http://loki:3001/loki/api/v1/push"
+    }
+}
+
+
+// Metrics
+prometheus.exporter.cadvisor "metrics_source" {
+    docker_host = "unix:///var/run/docker.sock"
+    store_container_labels = true
+    storage_duration = "5m"
+}
+
+prometheus.scrape "metrics_scraper" {
+    targets    = prometheus.exporter.cadvisor.metrics_source.targets
+    forward_to = [ prometheus.relabel.metrics_relabeler.receiver ]
+}
+
+prometheus.relabel "metrics_relabeler" {
+    forward_to = [prometheus.remote_write.metrics_writer.receiver]
+
+    rule {
+        source_labels = ["name"]
+        target_label = "container"
+    }
+}
+
+prometheus.remote_write "metrics_writer" {
+    endpoint {
+        url = "http://mimir:3002/api/v1/push"
+    }
+}
