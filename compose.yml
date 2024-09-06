@@ -1,21 +1,5 @@
 
 services:
-  # agent:
-  #   container_name: agent
-  #   image: grafana/agent
-  #   volumes:
-  #     - ./agent/config:/etc/agent
-  #     - ./agent/data:/tmp/agent
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #   entrypoint:
-  #    - /bin/agent
-  #    - -config.file=/etc/agent/agent-config.yml
-  #   ports:
-  #     - "12345:12345"
-  #     - "4317:4317"
-  #     - "4318:4318"
-  #   networks:
-  #     - monitoring
 
   alloy:
     container_name: alloy
@@ -33,6 +17,8 @@ services:
       - /dev/kmsg
     ports:
       - '12345:12345'
+      - "4317:4317"
+      - "4318:4318"
     privileged: true
     networks:
       - monitoring
@@ -73,17 +59,17 @@ services:
     networks:
       - monitoring
 
-  # tempo:
-  #   container_name: tempo
-  #   image: grafana/tempo
-  #   command: -config.file=/etc/tempo/tempo-config.yml
-  #   volumes:
-  #     - ./tempo/config:/etc/tempo
-  #     - ./tempo/data:/tmp/tempo
-  #   ports: 
-  #     - "2003:3003"
-  #   networks:
-  #     - monitoring
+  tempo:
+    container_name: tempo
+    image: grafana/tempo
+    command: -config.file=/etc/tempo/tempo-config.yml
+    volumes:
+      - ./tempo/config:/etc/tempo
+      - ./tempo/data:/tmp/tempo
+    ports: 
+      - "2003:3003"
+    networks:
+      - monitoring
 
 networks:
   monitoring:

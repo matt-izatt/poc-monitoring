@@ -1,4 +1,4 @@
-//Logs
+// Docker Logs
 discovery.docker "logs_integrations_docker" {
     host = "unix:///var/run/docker.sock"
 }
@@ -7,8 +7,8 @@ discovery.relabel "logs_integrations_docker" {
     targets = []
 
     rule {
-        target_label = "job"
-        replacement = "integrations/docker"
+        target_label = "source"
+        replacement = "docker"
     }
 
     rule {
@@ -21,17 +21,11 @@ discovery.relabel "logs_integrations_docker" {
         regex = "/(.*)"
         target_label = "container"
     }
-
-    rule {
-        source_labels = ["__meta_docker_container_log_stream"]
-        target_label = "stream"
-    }
 }
 
 loki.source.docker "logs_integrations_docker" {
     host       = "unix:///var/run/docker.sock"
     targets    = discovery.docker.logs_integrations_docker.targets
-    labels     = {"source" = "docker"}
     relabel_rules = discovery.relabel.logs_integrations_docker.rules
     forward_to = [loki.write.local.receiver]
 }
@@ -44,7 +38,7 @@ loki.write "local" {
 }
 
 
-// Metrics
+// Cadvisor Metrics
 prometheus.exporter.cadvisor "metrics_source" {
     docker_host = "unix:///var/run/docker.sock"
     store_container_labels = true
@@ -69,4 +63,55 @@ prometheus.remote_write "metrics_writer" {
     endpoint {
         url = "http://mimir:3002/api/v1/push"
     }
+}
+
+
+// Open Telemetry
+otelcol.receiver.otlp "example" {
+  grpc {
+    endpoint = "127.0.0.1:4317"
+  }
+
+  http {
+    endpoint = "127.0.0.1:4318"
+  }
+
+  output {
+    metrics = [otelcol.processor.batch.example.input]
+    logs    = [otelcol.processor.batch.example.input]
+    traces  = [otelcol.processor.batch.example.input]
+  }
+}
+
+otelcol.processor.batch "example" {
+  send_batch_size = 100
+
+  output {
+    metrics = [otelcol.exporter.prometheus.default.input]
+    logs    = [otelcol.exporter.loki.default.input]
+    traces  = [otelcol.exporter.otlp.default.input]
+  }
+}
+
+otelcol.exporter.prometheus "default" {
+  forward_to = [prometheus.remote_write.metrics_writer.receiver]
+}
+
+otelcol.exporter.loki "default" {
+  forward_to = [loki.relabel.otel_source.receiver]
+}
+
+loki.relabel "otel_source" {
+  forward_to = [loki.write.local.receiver]
+
+  rule {
+    target_label = "source"
+    replacement = "docker"
+  }
+}
+
+otelcol.exporter.otlp "default" {
+  client {
+    endpoint = "http://tempo:4317"
+  }
 }
