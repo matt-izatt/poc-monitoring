@@ -1,4 +1,0 @@
-scripts:
-  start: 
-    desc: Starts the monitoring compose stack
-    cmd: docker compose -p monitoring -f ./compose.yml up --force-recreate -d
