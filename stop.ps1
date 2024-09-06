@@ -1,0 +1,1 @@
+docker compose -f ./compose.yml -p mi-monitoring down
